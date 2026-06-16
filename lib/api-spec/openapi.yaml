@@ -1,0 +1,916 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Allied School Management System API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: students
+    description: Student management
+  - name: fees
+    description: Fee management
+  - name: attendance
+    description: Attendance tracking
+  - name: announcements
+    description: Announcements and notifications
+  - name: dashboard
+    description: Dashboard statistics
+  - name: settings
+    description: Admin settings
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResult"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /students:
+    get:
+      operationId: listStudents
+      tags: [students]
+      summary: List all students
+      parameters:
+        - name: class
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+    post:
+      operationId: createStudent
+      tags: [students]
+      summary: Register a new student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentInput"
+      responses:
+        "201":
+          description: Student created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+
+  /students/{id}:
+    get:
+      operationId: getStudent
+      tags: [students]
+      summary: Get student by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Student record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentDetail"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateStudent
+      tags: [students]
+      summary: Update student
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentUpdate"
+      responses:
+        "200":
+          description: Updated student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+    delete:
+      operationId: deleteStudent
+      tags: [students]
+      summary: Delete student
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /fees:
+    get:
+      operationId: listFees
+      tags: [fees]
+      summary: List fee records
+      parameters:
+        - name: class
+          in: query
+          schema:
+            type: string
+        - name: month
+          in: query
+          schema:
+            type: integer
+        - name: year
+          in: query
+          schema:
+            type: integer
+        - name: studentId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Fee records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FeeRecord"
+    post:
+      operationId: createFeeRecord
+      tags: [fees]
+      summary: Create fee record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeeRecordInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeeRecord"
+
+  /fees/{id}:
+    patch:
+      operationId: updateFeeRecord
+      tags: [fees]
+      summary: Update fee record (mark paid/unpaid)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeeRecordUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeeRecord"
+
+  /fees/generate-monthly:
+    post:
+      operationId: generateMonthlyFees
+      tags: [fees]
+      summary: Generate monthly fee records for all students
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateMonthlyFeesInput"
+      responses:
+        "200":
+          description: Generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /attendance:
+    get:
+      operationId: listAttendance
+      tags: [attendance]
+      summary: List attendance records
+      parameters:
+        - name: class
+          in: query
+          schema:
+            type: string
+        - name: date
+          in: query
+          schema:
+            type: string
+        - name: studentId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Attendance records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttendanceRecord"
+    post:
+      operationId: markAttendance
+      tags: [attendance]
+      summary: Mark attendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttendanceInput"
+      responses:
+        "201":
+          description: Marked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttendanceRecord"
+
+  /attendance/{id}:
+    patch:
+      operationId: updateAttendance
+      tags: [attendance]
+      summary: Update attendance record
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttendanceUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttendanceRecord"
+
+  /announcements:
+    get:
+      operationId: listAnnouncements
+      tags: [announcements]
+      summary: List announcements
+      parameters:
+        - name: targetRole
+          in: query
+          schema:
+            type: string
+            enum: [all, admin, parents]
+      responses:
+        "200":
+          description: Announcements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Announcement"
+    post:
+      operationId: createAnnouncement
+      tags: [announcements]
+      summary: Create announcement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnnouncementInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+
+  /announcements/{id}:
+    delete:
+      operationId: deleteAnnouncement
+      tags: [announcements]
+      summary: Delete announcement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get dashboard statistics
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /dashboard/daily-collection:
+    get:
+      operationId: getDailyCollection
+      tags: [dashboard]
+      summary: Get daily fee collection summary
+      parameters:
+        - name: date
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Daily collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyCollection"
+
+  /dashboard/class-summary:
+    get:
+      operationId: getClassSummary
+      tags: [dashboard]
+      summary: Get per-class student and fee summary
+      responses:
+        "200":
+          description: Class summary
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ClassSummary"
+
+  /settings/credentials:
+    get:
+      operationId: listCredentials
+      tags: [settings]
+      summary: List all login credentials (passwords hidden)
+      responses:
+        "200":
+          description: Credentials list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CredentialInfo"
+
+  /settings/change-password:
+    post:
+      operationId: changePassword
+      tags: [settings]
+      summary: Change password for a user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordInput"
+      responses:
+        "200":
+          description: Password changed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /parents/child-progress/{rollNumber}:
+    get:
+      operationId: getChildProgress
+      tags: [students]
+      summary: Get child progress by roll number (parent portal)
+      parameters:
+        - name: rollNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Child progress
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChildProgress"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required: [success]
+
+    LoginInput:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required: [username, password]
+
+    LoginResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        role:
+          type: string
+          enum: [admin, director]
+        username:
+          type: string
+      required: [success, role, username]
+
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        rollNumber:
+          type: string
+        name:
+          type: string
+        class:
+          type: string
+        section:
+          type: ["string", "null"]
+        fatherName:
+          type: string
+        motherName:
+          type: ["string", "null"]
+        phone:
+          type: string
+        address:
+          type: ["string", "null"]
+        admissionDate:
+          type: string
+        monthlyFee:
+          type: integer
+        isActive:
+          type: boolean
+        leftDate:
+          type: ["string", "null"]
+      required: [id, rollNumber, name, class, fatherName, phone, admissionDate, monthlyFee, isActive]
+
+    StudentDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        rollNumber:
+          type: string
+        name:
+          type: string
+        class:
+          type: string
+        section:
+          type: ["string", "null"]
+        fatherName:
+          type: string
+        motherName:
+          type: ["string", "null"]
+        phone:
+          type: string
+        address:
+          type: ["string", "null"]
+        admissionDate:
+          type: string
+        monthlyFee:
+          type: integer
+        isActive:
+          type: boolean
+        leftDate:
+          type: ["string", "null"]
+        feeHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeeRecord"
+        attendanceSummary:
+          $ref: "#/components/schemas/AttendanceSummary"
+      required: [id, rollNumber, name, class, fatherName, phone, admissionDate, monthlyFee, isActive, feeHistory, attendanceSummary]
+
+    StudentInput:
+      type: object
+      properties:
+        rollNumber:
+          type: string
+        name:
+          type: string
+        class:
+          type: string
+        section:
+          type: string
+        fatherName:
+          type: string
+        motherName:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        admissionDate:
+          type: string
+        monthlyFee:
+          type: integer
+      required: [rollNumber, name, class, fatherName, phone, admissionDate, monthlyFee]
+
+    StudentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        class:
+          type: string
+        section:
+          type: string
+        fatherName:
+          type: string
+        motherName:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        monthlyFee:
+          type: integer
+        isActive:
+          type: boolean
+        leftDate:
+          type: string
+
+    FeeRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        studentName:
+          type: ["string", "null"]
+        rollNumber:
+          type: ["string", "null"]
+        class:
+          type: ["string", "null"]
+        month:
+          type: integer
+        year:
+          type: integer
+        amount:
+          type: integer
+        paid:
+          type: boolean
+        paidDate:
+          type: ["string", "null"]
+      required: [id, studentId, month, year, amount, paid]
+
+    FeeRecordInput:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        amount:
+          type: integer
+      required: [studentId, month, year, amount]
+
+    FeeRecordUpdate:
+      type: object
+      properties:
+        paid:
+          type: boolean
+        paidDate:
+          type: string
+
+    GenerateMonthlyFeesInput:
+      type: object
+      properties:
+        month:
+          type: integer
+        year:
+          type: integer
+      required: [month, year]
+
+    AttendanceRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        studentName:
+          type: ["string", "null"]
+        rollNumber:
+          type: ["string", "null"]
+        class:
+          type: ["string", "null"]
+        date:
+          type: string
+        present:
+          type: boolean
+      required: [id, studentId, date, present]
+
+    AttendanceInput:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        date:
+          type: string
+        present:
+          type: boolean
+      required: [studentId, date, present]
+
+    AttendanceUpdate:
+      type: object
+      properties:
+        present:
+          type: boolean
+
+    AttendanceSummary:
+      type: object
+      properties:
+        totalDays:
+          type: integer
+        presentDays:
+          type: integer
+        absentDays:
+          type: integer
+        percentage:
+          type: number
+      required: [totalDays, presentDays, absentDays, percentage]
+
+    Announcement:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        targetRole:
+          type: string
+          enum: [all, admin, parents]
+        createdAt:
+          type: string
+      required: [id, title, content, targetRole, createdAt]
+
+    AnnouncementInput:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        targetRole:
+          type: string
+          enum: [all, admin, parents]
+      required: [title, content, targetRole]
+
+    DashboardStats:
+      type: object
+      properties:
+        totalStudents:
+          type: integer
+        activeStudents:
+          type: integer
+        currentMonthFeeExpected:
+          type: integer
+        currentMonthFeeCollected:
+          type: integer
+        currentMonthFeePending:
+          type: integer
+        todayAttendancePresent:
+          type: integer
+        todayAttendanceAbsent:
+          type: integer
+        totalAnnouncements:
+          type: integer
+      required: [totalStudents, activeStudents, currentMonthFeeExpected, currentMonthFeeCollected, currentMonthFeePending, todayAttendancePresent, todayAttendanceAbsent, totalAnnouncements]
+
+    DailyCollection:
+      type: object
+      properties:
+        date:
+          type: string
+        totalCollected:
+          type: integer
+        paymentCount:
+          type: integer
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeeRecord"
+      required: [date, totalCollected, paymentCount, payments]
+
+    ClassSummary:
+      type: object
+      properties:
+        class:
+          type: string
+        totalStudents:
+          type: integer
+        feesPaid:
+          type: integer
+        feesPending:
+          type: integer
+        totalFeeExpected:
+          type: integer
+        totalFeeCollected:
+          type: integer
+      required: [class, totalStudents, feesPaid, feesPending, totalFeeExpected, totalFeeCollected]
+
+    CredentialInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        role:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, username, role, updatedAt]
+
+    ChangePasswordInput:
+      type: object
+      properties:
+        username:
+          type: string
+        newPassword:
+          type: string
+      required: [username, newPassword]
+
+    ChildProgress:
+      type: object
+      properties:
+        student:
+          $ref: "#/components/schemas/Student"
+        attendanceSummary:
+          $ref: "#/components/schemas/AttendanceSummary"
+        feeStatus:
+          type: object
+          properties:
+            currentMonth:
+              $ref: "#/components/schemas/FeeRecord"
+            pendingCount:
+              type: integer
+            totalDue:
+              type: integer
+          required: [pendingCount, totalDue]
+        recentAttendance:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttendanceRecord"
+        announcements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Announcement"
+      required: [student, attendanceSummary, feeStatus, recentAttendance, announcements]

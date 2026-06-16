@@ -1,0 +1,32 @@
+Listen carefully, hume system mein kuch naye features add karne hain aur ek existing bug fix karna hai. Please step-by-step yeh saare kaam parallel mein ya ek ke baad ek implement karo:
+
+1. BUG FIX (Roll Number Search):
+Abhi system mein bache ko Roll Number se search karne par error aa raha hai ya search nahi ho raha (PostgreSQL mein text vs integer data type ka issue lag raha hai). Isko back-end par sabse pehle theek karo taake Roll Number search query perfectly kaam kare.
+
+2. ADMIN PORTAL UPDATES & TEACHER ENROLLMENT:
+- Teacher Enrollment Section: Jese student enrollment hoti hai, bilkul waise hi pehle "Teacher Enrollment" ka section banao.
+- Fields to Add: Full Name, Contact Number, Address, Joining Date, Monthly Salary, aur "Subjects Taught" (Jis mein Admin manually multiple subjects select ya text add kar sake jo wo teacher parhati hai).
+- Class/Section Assigning: Jab Admin kisi class ke liye Incharge Teacher select karne lage, to wahan drop-down ya search option ho jo sirf available (unassigned) teachers dikhaye taake duplication na ho.
+- Master Attendance Dashboard: Admin portal par ek dashboard ho jahan saari teachers ki daily attendance aur monthly paid leaves auto-calculate ho kar dikhein.
+
+3. SEPARATE INCHARGE TEACHER PORTAL & ATTENDANCE:
+- Login Session: Incharge Teachers ke liye alag se login session banao. Login karte ہی top bar par teacher ka naam show hona chahiye (e.g., "Welcome, Teacher Name").
+- Local Network Security: Yeh portal sirf school ke local network/environment par chalne ke hisab se design karo.
+- Teacher Daily Attendance: Login karte hi teacher ke paas apni Daily Attendance mark karne ka option ho aur total lectures counter chalay. Agar woh kisi din attendance mark nahi karti, to system use "OFF / Absent" show karega.
+- Student Attendance: Teacher apne portal se assigned class ke bachon ki daily attendance digital ek click se mark karegi. Yeh attendance data direct Admin portal par reports mein aur student ke portal par live reflect hona chahiye.
+
+4. AUTOMATED RESULT, CONFIGURATION & GRADING SYSTEM:
+- Test/Exam Configuration: Teacher portal mein option ho jahan teacher apni class ke total subjects khud add kar sake. 
+- Global Total Marks: Baar baar har bache ke liye total marks enter karne ki jhanjhat khatam karo. Jab teacher test/exam configure karegi, to Total Marks poori class ke liye AIK HI BAAR put ho jayein ge.
+- Smart Result Input: Result banate waqt teacher bache ko search karegi aur sirf "Obtained Marks" likhegi.
+- Auto-Calculation: System khud-ba-khud bache ki Percentage (%), Grade (A+, A, B, etc.), Pass/Fail status, aur class mein kya Position (1st, 2nd, 3rd etc.) aayi hai, woh auto-calculate karega.
+- Live Reflection: Yeh result data Admin portal par live show hoga aur back-end structure aisa rakho jo Parent Portal se bhi integrate ho sake.
+
+5. SMART FINE & CHALLAN INTEGRATION:
+- Instant Fine Imposition: Teacher portal par option ho bache ko instant fine (e.g., Late Fine, Uniform Fine, Discipline Fine) lagane ka.
+- Auto-Challan Update: Jab teacher fine lagaye, to woh fine direct bache ke chalte hue mahine ke fee challan mein ek alag portion (column/row) ban kar auto-add ho jaye. Yeh fine Admin portal aur Parent portal par bhi show hona chahiye.
+
+6. PARENTAL PORTAL REFINEMENT:
+- Parents ke liye sirf Roll Number ki pabandi khatam karo. Ab Parent Portal mein bache ki progress track karne ke liye Class Selection, Student Name, ya Roll Number—teeno tariqon se search karne ka option add karo taake parents aasaani se bache ka result aur fine status dekh sakein.
+
+Pehle Roll Number wala bug theek karo, phir in saare features ka database structure update karke front-end aur back-end complete karo. Roman Urdu mein hi confirmation dena jab kaam ho jaye!

@@ -1,0 +1,75 @@
+RENDER DEPLOY STEPS - ALLIED SCHOOL MANAGEMENT HUB
+
+Recommended platform: Render
+
+Why Render:
+- Node/Express Web Service supported.
+- PostgreSQL database supported.
+- Public URL like https://your-app.onrender.com is generated after deploy.
+
+IMPORTANT:
+Render deploy normally works from GitHub/GitLab repository.
+So first upload this project to GitHub, then connect GitHub repo to Render.
+
+STEP 1 - GitHub
+1. Go to github.com
+2. Create new repository:
+   allied-school-management-hub
+3. Upload all files/folders from this project zip.
+4. Commit/upload.
+
+STEP 2 - Render Blueprint
+1. Go to render.com
+2. Sign up / log in.
+3. Click New.
+4. Choose Blueprint.
+5. Connect your GitHub repo.
+6. Render will detect render.yaml.
+7. Click Apply / Deploy.
+
+STEP 3 - Wait
+Render will:
+1. Create web service.
+2. Create PostgreSQL database.
+3. Set DATABASE_URL automatically from database.
+4. Build frontend.
+5. Build backend.
+6. Start the app.
+
+STEP 4 - Open App
+After deploy completes, Render gives URL:
+
+https://allied-school-management-hub.onrender.com
+
+Open that URL in browser.
+
+Default login:
+
+admin / allied2024
+director / director2024
+principal / principal2024
+
+STEP 5 - If Blueprint does not work
+Create manually:
+
+New > Postgres
+Name: allied-school-db
+
+New > Web Service
+Build command:
+pnpm install --frozen-lockfile && pnpm run replit:prepare
+
+Start command:
+NODE_ENV=production pnpm --filter @workspace/api-server run start
+
+Environment variables:
+NODE_ENV=production
+BASE_PATH=/
+DATABASE_URL=<copy from Render Postgres internal connection string>
+SCHOOL_ALLOWED_IPS=<optional school public IP>
+
+STEP 6 - Demo Notes
+- If app sleeps on free plan, first load can be slow.
+- Change passwords after first login.
+- Keep DATABASE_URL private.
+

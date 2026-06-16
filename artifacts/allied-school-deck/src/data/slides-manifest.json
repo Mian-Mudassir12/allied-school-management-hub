@@ -1,0 +1,58 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide1Cover.tsx",
+    "title": "Cover — Allied School Management System",
+    "description": "Title slide with school logo, deck name, campus and date metadata.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide2Problem.tsx",
+    "title": "Problem — Manual records caused errors and delays",
+    "description": "Four bullets on the manual record-keeping pain points replaced by this system.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide3Solution.tsx",
+    "title": "Solution — Browser-based portal for real-time control",
+    "description": "Four bullets describing the portal's key capabilities and access model.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide4Modules.tsx",
+    "title": "Modules — Six modules cover the full workflow",
+    "description": "Table listing all six portal modules with their functions.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1234-efab-345678901235",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide5Roles.tsx",
+    "title": "Roles — Admin controls data, Directors review it",
+    "description": "Three-column role breakdown: Admin (full access), Director and Principal (read-only, own password only).",
+    "speakerNotes": ""
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2345-fabc-456789012346",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide6Hosting.tsx",
+    "title": "Hosting — Three ways to run the system",
+    "description": "School computer (free), cloud server (paid), Replit platform (current setup) with pros and cons.",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a7b8c9d0-e1f2-3456-abcd-567890123457",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide7Closing.tsx",
+    "title": "Closing — Ready for immediate use with demo credentials",
+    "description": "Closing slide with logo, tagline, and three demo login credentials for admin, director, and principal.",
+    "speakerNotes": ""
+  }
+]

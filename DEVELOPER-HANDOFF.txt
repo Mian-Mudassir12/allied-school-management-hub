@@ -1,0 +1,101 @@
+DEVELOPER HANDOFF - ALLIED SCHOOL MANAGEMENT HUB
+
+Project type:
+- Full-stack school management app.
+- Frontend: React + Vite.
+- Backend: Express API.
+- Database: PostgreSQL through DATABASE_URL.
+- Package manager: pnpm workspace.
+
+Main app folders:
+- artifacts/allied-school
+  Frontend app.
+- artifacts/api-server
+  Backend API server.
+- lib/db
+  Database schema and PostgreSQL connection.
+- attached_assets
+  Uploaded/reference assets.
+- local-setup
+  Older local setup helper files.
+
+Important implemented features:
+- Admin dashboard.
+- Students management.
+- Fees management and challan printing.
+- Attendance.
+- Teachers management.
+- Teacher portal.
+- Teacher own attendance IP/network restriction.
+- Subjects per class.
+- Academic/timetable/test/result/report flow.
+- Parent portal progress data.
+
+Teacher portal latest flow:
+- /teacher-portal
+  Teacher dashboard.
+- /teacher-portal/student-report
+  Search-only student report by name or roll number.
+- /teacher-portal/upload-result
+  Upload result/checked paper.
+- /teacher-portal/mark-exam
+  Create test/exam.
+- /teacher-portal/attendance
+  Class attendance for incharge class only.
+- /teacher-portal/attendance-register
+  View attendance by date/student.
+- /teacher-portal/schedule
+  Timetable.
+
+Required environment variables:
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+NODE_ENV=production
+PORT=3000
+BASE_PATH=/
+
+Optional:
+
+SCHOOL_ALLOWED_IPS=school_public_ip
+
+SCHOOL_ALLOWED_IPS is used for teacher's own attendance lock only.
+Student attendance and admin work should not be locked by this variable.
+
+Local development:
+
+pnpm install
+pnpm --filter @workspace/db run push
+
+Backend:
+PORT=3001 NODE_ENV=development pnpm --filter @workspace/api-server run dev
+
+Frontend:
+PORT=3000 BASE_PATH=/ NODE_ENV=development pnpm --filter @workspace/allied-school run dev --host 0.0.0.0
+
+Single-service production/demo:
+
+pnpm run replit:demo
+
+This command:
+1. Builds the frontend.
+2. Builds the backend.
+3. Copies frontend build into backend public folder.
+4. Pushes DB schema.
+5. Starts the backend server.
+
+Default seeded logins:
+
+admin / allied2024
+director / director2024
+principal / principal2024
+
+Important note:
+Replit UI/Shell/Agent was hanging during setup in the browser, so the project may need to be run by a developer through Shell/terminal or hosted on a stable Node host with PostgreSQL.
+
+Recommended practical hosting:
+- Render/Railway/Fly.io for Node app.
+- Neon/Render/Railway PostgreSQL for database.
+- Set DATABASE_URL in host environment variables.
+
+Do not change app features unless requested by owner.
+

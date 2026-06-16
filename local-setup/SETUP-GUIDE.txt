@@ -1,0 +1,97 @@
+============================================================
+  ALLIED SCHOOL REHMAN CAMPUS - LOCAL SETUP GUIDE
+  Windows PC pe install karne ka tarika
+============================================================
+
+YEH GUIDE SIRF EK BAAR PADHNI HAI - SETUP K BAAD DAILY
+SIRF "2-START.bat" CHALANA HAI.
+
+------------------------------------------------------------
+STEP 1: Node.js Install Karo (PEHLI BAAR SIRF)
+------------------------------------------------------------
+1. Browser mein jaao: https://nodejs.org
+2. "LTS" wala green button click karo (download hoga)
+3. Download hua file (nodejs-xx-x64.msi) open karo
+4. "Next > Next > Install" karo - bas
+5. Install hone ke baad computer RESTART karo
+
+CHECK KARO: Start menu mein "cmd" search karo, open karo,
+type karo:  node --version
+Agar "v20.x.x" jaisa kuch aaye - THEEK HAI ✓
+
+------------------------------------------------------------
+STEP 2: PostgreSQL Install Karo (PEHLI BAAR SIRF)
+------------------------------------------------------------
+1. Browser mein jaao: https://www.postgresql.org/download/windows/
+2. "Download the installer" click karo
+3. Sabse upar wala version download karo (PostgreSQL 16)
+4. File open karo, install karo
+5. ZAROOR YAAD RAKHO: "Password" wali jagah koi password
+   likhna hoga - YAAD RAKHEIN YEH PASSWORD!
+   (Example: allied2024 - ya jo bhi aap rakhen)
+6. Port: 5432 rehne do (change mat karo)
+7. Baki sab "Next" karo - install ho jaayega
+
+------------------------------------------------------------
+STEP 3: Project Download Karo (PEHLI BAAR SIRF)
+------------------------------------------------------------
+1. Replit mein jaao - apna project open karo
+2. Upar "..." ya "Download as ZIP" option se ZIP download karo
+3. ZIP ko apne school PC mein kisi folder mein extract karo
+   (Example: C:\AlliedSchool\)
+
+------------------------------------------------------------
+STEP 4: SETUP CHALAO (SIRF EK BAAR)
+------------------------------------------------------------
+1. Extracted folder mein jaao (C:\AlliedSchool\)
+2. "local-setup" folder kholo
+3. "1-SETUP.bat" file pe RIGHT-CLICK karo
+4. "Run as administrator" click karo
+5. Poochhe ga: "Database Password kya rakha tha?"
+   -> Wahi password likhein jo Step 2 mein rakha tha
+6. Wait karo - 5-10 minute lagenge (packages download honge)
+7. "SETUP COMPLETE" message aaye toh sab theek hai ✓
+
+------------------------------------------------------------
+STEP 5: ROZ KA KAAM - School Start Karte Waqt
+------------------------------------------------------------
+1. "local-setup" folder mein jaao
+2. "2-START.bat" pe double-click karo
+3. Black screen aayegi - Band MAT KARO (minimize karo)
+4. Browser mein jaao: http://localhost:3000
+5. LOGIN KAREIN: admin / allied2024
+
+BAND KARNA HO TOH:
+- Black screen (Command Prompt) close karo
+- Ya 2-STOP.bat chalao
+
+------------------------------------------------------------
+SCHOOL NETWORK SE ACCESS KAISE KAREN?
+------------------------------------------------------------
+School ke doosre computers ya phones se bhi access ho sakta
+hai - sirf IP address pata karo:
+
+1. CMD open karo (Start menu mein "cmd" type karo)
+2. Type karo: ipconfig
+3. "IPv4 Address" wali line dhundho
+   Example: 192.168.1.105
+4. Doosre computers mein browser mein jaao:
+   http://192.168.1.105:3000
+   (Apna IP address likho 192.168.1.105 ki jagah)
+
+ZAROOR: Doosra computer USI WiFi/network pe hona chahiye!
+
+------------------------------------------------------------
+DATA BACKUP - HAFTE MEIN EK BAAR ZAROOR KARO!
+------------------------------------------------------------
+System mein login karo -> Settings -> "Backup Data" button
+CSV files download hongi - USB mein save karo.
+
+------------------------------------------------------------
+KUCH KAAM NA KARE TOH?
+------------------------------------------------------------
+- "3-LOGS.bat" chalao - error message dikhega
+- PostgreSQL service start karo:
+  Services.msc kholo -> "postgresql" dhundho -> Start karo
+
+============================================================

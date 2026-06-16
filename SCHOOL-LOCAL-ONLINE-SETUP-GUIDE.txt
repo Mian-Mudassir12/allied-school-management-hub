@@ -1,0 +1,187 @@
+SCHOOL MANAGEMENT HUB - LOCAL + ONLINE SETUP GUIDE
+Roman Urdu / Practical Steps
+
+IMPORTANT FINAL PLAN
+Use ONE online PostgreSQL database for both:
+1. School local PC app
+2. Replit online app
+
+Is tarah local PC aur Replit dono same DATABASE_URL use karen ge. Data real-time same rahega, kyun ke dono apps same database me read/write karen gi.
+
+Do NOT keep two separate databases if you want real-time sync.
+
+------------------------------------------------------------
+PART 1 - USB ME KYA LE KAR JANA HAI
+------------------------------------------------------------
+1. Final zip file USB me copy karo.
+2. School PC me zip extract karo.
+3. School PC me Node.js LTS install hona chahiye.
+4. Internet hona chahiye agar real-time online database sync chahiye.
+5. PostgreSQL local install karna zaroori nahi agar online database use kar rahe ho.
+
+------------------------------------------------------------
+PART 2 - ONLINE DATABASE BANANA
+------------------------------------------------------------
+Recommended: Neon PostgreSQL ya Replit PostgreSQL.
+
+Tumhe aik connection string milegi:
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+
+Isi same DATABASE_URL ko:
+- School local PC ke .env me lagana hai
+- Replit Secrets me lagana hai
+
+Yahi real-time sync ka main point hai.
+
+------------------------------------------------------------
+PART 3 - SCHOOL WIFI / IP LOCK
+------------------------------------------------------------
+Project me teacher ki apni attendance ke liye IP lock already hai.
+
+Environment variable:
+
+SCHOOL_ALLOWED_IPS=YOUR_SCHOOL_PUBLIC_IP
+
+Example:
+
+SCHOOL_ALLOWED_IPS=39.50.120.10
+
+Notes:
+- Ye sirf teacher ki apni attendance mark karne ke liye use hoga.
+- Student attendance, exams, reports, fees, admin work normal role/login se chalega.
+- Agar school ka public IP dynamic hai, to IP change hone par SCHOOL_ALLOWED_IPS update karna hoga.
+- Agar school me static IP nahi hai, ISP se static IP lena best hai.
+
+School local PC par agar sirf school WiFi users ko access dena hai:
+- App ko school PC par run karo.
+- Same WiFi ke devices browser me school PC ka LAN IP open karen:
+  http://SCHOOL_PC_IP:3000
+- Example:
+  http://192.168.100.4:3000
+- Router/firewall me port 3000 ko internet par open mat karo.
+
+------------------------------------------------------------
+PART 4 - SCHOOL LOCAL PC SETUP
+------------------------------------------------------------
+1. Zip extract karo.
+2. Project folder open karo.
+3. Root folder me .env file banao.
+
+.env example:
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+NODE_ENV=development
+PORT=3001
+SCHOOL_ALLOWED_IPS=YOUR_SCHOOL_PUBLIC_IP
+
+4. Terminal / CMD me project root par:
+
+pnpm install
+
+5. Database tables push / setup:
+
+pnpm --filter @workspace/db run push
+
+6. Backend start:
+
+pnpm --filter @workspace/api-server run dev
+
+7. Frontend start:
+
+pnpm --filter @workspace/allied-school run dev --host 0.0.0.0
+
+8. School PC par open:
+
+http://localhost:3000
+
+9. Same school WiFi ke mobiles/PCs par open:
+
+http://SCHOOL_PC_LAN_IP:3000
+
+Example:
+
+http://192.168.100.4:3000
+
+------------------------------------------------------------
+PART 5 - REPLIT ONLINE SETUP
+------------------------------------------------------------
+1. Replit me new project/app banao.
+2. Final zip upload karo.
+3. Replit Shell me:
+
+pnpm install
+
+4. Replit Secrets me add karo:
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DB?sslmode=require
+NODE_ENV=production
+SCHOOL_ALLOWED_IPS=YOUR_SCHOOL_PUBLIC_IP
+
+5. Replit run command:
+
+pnpm --filter @workspace/api-server run dev
+
+6. Agar publish karna ho:
+- Replit me Publish / Deployment use karo.
+- Deployment ke secrets me bhi same DATABASE_URL aur SCHOOL_ALLOWED_IPS set karna zaroori hai.
+
+Replit published apps cloud snapshot ke through run hoti hain. Publish ke baad update chahiye ho to dobara publish karna hota hai.
+
+------------------------------------------------------------
+PART 6 - REAL-TIME SYNC KA RULE
+------------------------------------------------------------
+Same data tabhi sync hoga jab:
+
+School local PC DATABASE_URL = Replit DATABASE_URL
+
+Agar dono alag database use karen ge to data sync nahi hoga.
+
+Simple example:
+- Teacher school me student attendance mark kare.
+- Data online PostgreSQL me save ho.
+- Principal ghar se Replit app open kare.
+- Same attendance show ho.
+
+------------------------------------------------------------
+PART 7 - LOGIN
+------------------------------------------------------------
+Default accounts seed hotay hain:
+
+admin / allied2024
+director / director2024
+principal / principal2024
+
+First login ke baad Settings se passwords change kar do.
+
+Teachers ke login admin portal ke Teachers section se banao.
+
+------------------------------------------------------------
+PART 8 - SECURITY BEST PRACTICE
+------------------------------------------------------------
+1. DATABASE_URL kabhi public chat/screenshot me share na karo.
+2. Replit Secrets use karo, code file me password hard-code mat karo.
+3. School local PC ka Windows login password strong rakho.
+4. Router me port 3000 public internet par open mat karo.
+5. Teacher own attendance ke liye SCHOOL_ALLOWED_IPS zaroor set karo.
+6. Regular database backup rakho.
+
+------------------------------------------------------------
+PART 9 - RECOMMENDED FINAL ARCHITECTURE
+------------------------------------------------------------
+Best practical setup:
+
+Online PostgreSQL Database
+        |
+        | same DATABASE_URL
+        |
+School Local PC App  <---->  Replit Online App
+        |
+School WiFi users open local LAN link
+
+Result:
+- Data same rahega.
+- School ke andar fast local link chalega.
+- Ghar se principal/teacher Replit online link se kaam kar sake ga.
+- Teacher apni attendance school IP ke baghair mark nahi kar sake ga.
+
