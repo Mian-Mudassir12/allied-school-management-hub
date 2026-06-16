@@ -1,5 +1,5 @@
 import app from "../artifacts/api-server/src/app";
-import { db, credentialsTable, ensureUpgradeSchema } from "@workspace/db";
+import { db, credentialsTable, ensureUpgradeSchema } from "../lib/db/src/index";
 import { sql } from "drizzle-orm";
 
 let ready: Promise<void> | null = null;
@@ -24,5 +24,5 @@ async function prepareDatabase() {
 
 export default async function handler(req: any, res: any) {
   await prepareDatabase();
-  return app(req, res);
+  return (app as any)(req, res);
 }
