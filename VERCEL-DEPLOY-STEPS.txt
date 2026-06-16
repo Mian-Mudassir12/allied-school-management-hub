@@ -1,56 +1,50 @@
-VERCEL DEPLOY STEPS - ALLIED SCHOOL MANAGEMENT HUB
+VERCEL PATCH APPLY STEPS - ALLIED SCHOOL MANAGEMENT HUB
 
-Use this when Render/Koyeb ask for credit card.
+This patch fixes the Vercel deploy dependency issue.
 
-Already required:
-- GitHub repo uploaded.
-- Neon database created.
-- Neon DATABASE_URL copied.
+STEP 1 - Extract this patch zip
+Extract the zip I gave you.
 
-STEP 1 - Push latest Vercel files to GitHub
-These files are important:
-- vercel.json
+STEP 2 - Copy files into GitHub Desktop folder
+Copy these files/folders into your GitHub Desktop project folder and replace existing files:
+
 - api/[...path].ts
+- package.json
+- pnpm-lock.yaml
+- vercel.json
+- VERCEL-DEPLOY-STEPS.txt
 
-STEP 2 - Open Vercel
-1. Go to https://vercel.com
-2. Sign up / login with GitHub.
-3. Click Add New > Project.
-4. Import GitHub repo:
-   allied-school-management-hub
+STEP 3 - Push with GitHub Desktop
+1. Open GitHub Desktop.
+2. Summary:
+   fix vercel deployment dependencies
+3. Click Commit to main.
+4. Click Push origin.
 
-STEP 3 - Project settings
-Vercel should read vercel.json automatically.
+STEP 4 - Vercel
+Go to Vercel. It should automatically redeploy after push.
+If it does not, open the project and click Redeploy on the latest deployment.
 
-If fields are shown:
+Correct Vercel settings:
+
+Root Directory:
+./
+
 Build Command:
 pnpm install --frozen-lockfile && PORT=3000 BASE_PATH=/ NODE_ENV=production pnpm --filter @workspace/allied-school run build
 
 Output Directory:
 artifacts/allied-school/dist/public
 
-Install Command:
-pnpm install --frozen-lockfile
+Environment Variables:
+DATABASE_URL = your Neon PostgreSQL connection string
+NODE_ENV = production
+BASE_PATH = /
 
-STEP 4 - Environment Variables
-Add:
-
-DATABASE_URL=<paste Neon connection string>
-NODE_ENV=production
-BASE_PATH=/
-SCHOOL_ALLOWED_IPS=<optional school public IP later>
-
-STEP 5 - Deploy
-Click Deploy.
-
-STEP 6 - Login
-Default:
+Default demo logins:
 admin / allied2024
 director / director2024
 principal / principal2024
 
-Notes:
-- The app uses Vercel serverless API functions under /api.
-- Neon is the database.
-- First API request can be slightly slow because DB schema preparation runs once.
-
+Important:
+The red sourcemap lines in Vercel logs are warnings. The real deployment error is usually at the very bottom of Deploy Logs.
