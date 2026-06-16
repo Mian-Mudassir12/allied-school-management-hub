@@ -1,17 +1,15 @@
 import app from "../artifacts/api-server/src/app";
-import { db, credentialsTable, ensureUpgradeSchema } from "../lib/db/src/index";
-import { sql } from "drizzle-orm";
+import { ensureUpgradeSchema, pool } from "../lib/db/src/index";
 
 let ready: Promise<void> | null = null;
 
 async function seedCredentials() {
-  const existing = await db.select({ count: sql<number>`count(*)::int` }).from(credentialsTable);
-  if (existing[0]?.count === 0) {
-    await db.insert(credentialsTable).values([
-      { username: "admin", password: "allied2024", role: "admin" },
-      { username: "director", password: "director2024", role: "director" },
-      { username: "principal", password: "principal2024", role: "admin" },
-    ]);
+  const existing = await pool.query<{ count: number }>("SELECT count(*)::int AS count FROM credentials");
+  if ((existing.rows[0]?.count ?? 0) === 0) {
+    await pool.query(
+      "INSERT INTO credentials (username, password, role) VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)",
+      ["admin", "allied2024", "admin", "director", "director2024", "director", "principal", "principal2024", "admin"],
+    );
   }
 }
 
