@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm install --frozen-lockfile && PORT=3000 BASE_PATH=/ NODE_ENV=production pnpm --filter @workspace/allied-school run build",
+  "outputDirectory": "artifacts/allied-school/dist/public",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

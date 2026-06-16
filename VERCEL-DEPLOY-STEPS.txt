@@ -1,0 +1,56 @@
+VERCEL DEPLOY STEPS - ALLIED SCHOOL MANAGEMENT HUB
+
+Use this when Render/Koyeb ask for credit card.
+
+Already required:
+- GitHub repo uploaded.
+- Neon database created.
+- Neon DATABASE_URL copied.
+
+STEP 1 - Push latest Vercel files to GitHub
+These files are important:
+- vercel.json
+- api/[...path].ts
+
+STEP 2 - Open Vercel
+1. Go to https://vercel.com
+2. Sign up / login with GitHub.
+3. Click Add New > Project.
+4. Import GitHub repo:
+   allied-school-management-hub
+
+STEP 3 - Project settings
+Vercel should read vercel.json automatically.
+
+If fields are shown:
+Build Command:
+pnpm install --frozen-lockfile && PORT=3000 BASE_PATH=/ NODE_ENV=production pnpm --filter @workspace/allied-school run build
+
+Output Directory:
+artifacts/allied-school/dist/public
+
+Install Command:
+pnpm install --frozen-lockfile
+
+STEP 4 - Environment Variables
+Add:
+
+DATABASE_URL=<paste Neon connection string>
+NODE_ENV=production
+BASE_PATH=/
+SCHOOL_ALLOWED_IPS=<optional school public IP later>
+
+STEP 5 - Deploy
+Click Deploy.
+
+STEP 6 - Login
+Default:
+admin / allied2024
+director / director2024
+principal / principal2024
+
+Notes:
+- The app uses Vercel serverless API functions under /api.
+- Neon is the database.
+- First API request can be slightly slow because DB schema preparation runs once.
+
